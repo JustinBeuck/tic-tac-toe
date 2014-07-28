@@ -28,11 +28,22 @@ var checkForWinner = function () {
   if ( spaces[0] === spaces[1] && spaces[1] === spaces[2]
     || spaces[3] === spaces[4] && spaces[4] === spaces[5]
     || spaces[6] === spaces[7] && spaces[7] === spaces[8]
+    || spaces[0] === spaces[3] && spaces[3] === spaces[6]
+    || spaces[1] === spaces[4] && spaces[4] === spaces[7]
+    || spaces[2] === spaces[5] && spaces[5] === spaces[8]
+    || spaces[0] === spaces[4] && spaces[4] === spaces[8]
+    || spaces[2] === spaces[4] && spaces[4] === spaces[6]
+
     // TODO: Check for rest of game winning cases
   )
-  {
-    console.log('somebody won');
+  { 
+    console.log('someboody won');
     // TODO: Trigger 'game-win' event with the winning player as the event data
+    $(document).trigger('game-win', currentPlayer)
+    for (var i=0; i < spaces.length; i ++) {
+      spaces[i] = NaN
+    }
+    $('div.space').removeClass("veggies junkfood");
   }
 };
 
@@ -42,7 +53,13 @@ $(document).on('click', '#board .space', function (e) {
 
   // Marks the space with the current player's name
   // TODO: Don't mark it unless the space is blank
-  spaces[spaceNum] = currentPlayer;
+    if (spaces[spaceNum]){
+      alert('That place is already');
+      setNextTurn();
+    }
+    else {
+      spaces[spaceNum] = currentPlayer;
+    };
   // Adds a class to elem so css can take care of the visuals
   $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
 
@@ -51,7 +68,8 @@ $(document).on('click', '#board .space', function (e) {
 });
 
 $(document).on('game-win', function (e, winner) {
-  // TODO: Alert who won the game
+  if (winner === currentPlayer){
+  alert( currentPlayer + "won!")}
 });
 
 // Start the game
